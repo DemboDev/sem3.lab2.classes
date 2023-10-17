@@ -175,7 +175,7 @@ public:
     void SetMove(char* move) {
         this->move = move;
     }
-    void SetName(char* date) {
+    void SetDate(char* date) {
         this->date = date;
     }
     class Book book;
