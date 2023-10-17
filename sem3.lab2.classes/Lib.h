@@ -237,7 +237,7 @@ Library LibraryInp(Book book, Client client, Operation operation) {
 
 // Дополнительные функции
 
-void PrintAuthor(Author author) { // вывод информации об авторе
+void PrintAuthor(Author author) { // вывод информаии об авторе
     puts(author.name);
     puts(author.date);
     puts(author.country);
