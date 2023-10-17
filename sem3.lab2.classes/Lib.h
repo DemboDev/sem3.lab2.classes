@@ -11,6 +11,45 @@
 
 class Author {
 public:
+    Author() {
+        char* name = (char*)calloc(Len, sizeof(char));
+        strcpy(name, "Иван Иванович Иванов\0");
+        char* date = (char*)calloc(LenDate, sizeof(char));
+        strcpy(date, "11.11.1911");
+        char* country = (char*)calloc(Len, sizeof(char));
+        strcpy(country, "Россия\0");
+    }
+    Author(char* name, char* date, char* country) {
+        if (strlen(name) == 0 || strlen(country) == 0) {
+            exit(-1);
+        }
+        else if (strlen(date) != LenDate - 1) {
+            puts("Я тупой прост немножко");
+            exit(-1);
+        }
+        else {
+            if (date[0] < '0' || date[0] > '3' || date[1] < '0' || (date[1] > '1' && date[0] > '2') || date[1] > '9' || date[2] != '.' || date[3] < '0' || date[3] > '1' || date[4] < '0' || (date[4] > '0' && date[3] > '2') || date[4] > '9' || date[5] != '.' || date[6] < '0' || date[6] > '9' || date[7] < '0' || date[7] > '9' || date[8] < '0' || date[8] > '9' || date[9] < '0' || date[9] > '9') {
+                puts("У тебя ошибка во времени, братан, так что извиняй, я пошёл");
+                exit(-1);
+            }
+            else {
+                this->name = name;
+                this->date = date;
+                this->country = country;
+            }
+        }
+    }
+    ~Author() {
+    }
+    char* GetName() {
+        return name;
+    }
+    char* GetDate() {
+        return date;
+    }
+    char* GetCountry() {
+        return country;
+    }
     char* name;
     char* date;
     char* country;
@@ -18,6 +57,33 @@ public:
 
 class Client {
 public:
+    Client() {
+    }
+    Client(char* name) {
+        this->name = name;
+        strcpy(this->date, "11.11.1911\0");
+        strcpy(this->address, "Россия\0");
+    }
+    Client(char* name, char* date, char* address) {
+        if (strlen(name) == 0 || strlen(date) != LenDate - 1 || strlen(address) == 0) {
+            exit(-1);
+        }
+        else {
+            this->name = name;
+            this->date = date;
+            this->address = address;
+        }
+    }
+    ~Client() {
+    }char* GetName() {
+        return name;
+    }
+    char* GetDate() {
+        return date;
+    }
+    char* GetAddress() {
+        return address;
+    }
     char* name;
     char* date;
     char* address;
@@ -26,16 +92,48 @@ public:
 class Book {
 public:
     char* name;
-    struct Author author;
+    class Author author;
     int year;
+    Book() {
+    }
+    Book(Author author) {
+        strcpy(this->name, "Захар Беляков");
+        this->year = 2000;
+        this->author = author;
+    }
+    Book(char* name, Author author, int year) {
+        if (strlen(name) == 0 || year < 1000) {
+            exit(-1);
+        }
+        else {
+            this->name = name;
+            this->author = author;
+            this->year = year;
+        }
+    }
+    ~Book() {
+    }
 };
 
 class Operation {
 public:
+    Operation(char* move, char* date, Book book, Client client) {
+        if (strlen(move) == 0 || strlen(date) != LenDate - 1) {
+            exit(-1);
+        }
+        else {
+            this->book = book;
+            this->client = client;
+            this->move = move;
+            this->date = date;
+        }
+    }
+    ~Operation() {
+    }
     char* move;
     char* date;
-    struct Book book;
-    struct Client client;
+    class Book book;
+    class Client client;
 };
 
 class Library {
@@ -43,9 +141,27 @@ public:
     int NumBooks = 1;
     int NumReaders = 1;
     int NumOperations = 1;
-    struct Book* book;
-    struct Client* readers;
-    struct Operation* operations;
+    Library(Book book, Client client, Operation operation, char* address) {
+        if (strlen(address) == 0) {
+            exit(-1);
+        }
+        else {
+            this->address = address;
+
+            this->book = (Book*)malloc(sizeof(Book));
+            this->book[this->NumBooks - 1] = book;
+
+            this->operations = (Operation*)malloc(sizeof(Operation));
+            this->operations[this->NumOperations - 1] = operation;
+
+            this->readers = (Client*)malloc(sizeof(Client));
+            this->readers[this->NumReaders - 1] = client;
+        }
+    }
+    ~Library(){}
+    class Book* book;
+    class Client* readers;
+    class Operation* operations;
     char* address;
 };
 
@@ -65,29 +181,6 @@ void wait() {
 
 // Основные функции
 
-Author AuthorInit(char* name, char* date, char* country) { // инициализация автора
-    Author buf;
-    if (strlen(name) == 0 || strlen(country) == 0) {
-        exit(-1);
-    }
-    else if (strlen(date) != LenDate - 1) {
-        puts("Я тупой прост немножко");
-        exit(-1);
-    }
-    else {
-        if (date[0] < '0' || date[0] > '3' || date[1] < '0' || (date[1] > '1' && date[0] > '2') || date[1] > '9' || date[2] != '.' || date[3] < '0' || date[3] > '1' || date[4] < '0' || (date[4] > '0' && date[3] > '2') || date[4] > '9' || date[5] != '.' || date[6] < '0' || date[6] > '9' || date[7] < '0' || date[7] > '9' || date[8] < '0' || date[8] > '9' || date[9] < '0' || date[9] > '9') {
-            puts("У тебя ошибка во времени, братан, так что извиняй, я пошёл");
-            exit(-1);
-        }
-        else {
-            buf.name = name;
-            buf.date = date;
-            buf.country = country;
-        }
-    }
-    return buf;
-}
-
 Author AuthorInput() { // ввод автора
     char* name = (char*)calloc(Len, sizeof(char));
     char* date = (char*)calloc(LenDate + 1, sizeof(char));
@@ -104,22 +197,7 @@ Author AuthorInput() { // ввод автора
     puts("Введите страну происхождения автора");
     gets_s(country, Len);
 
-    Author buffer = AuthorInit(name, date, country);
-    return buffer;
-}
-
-Client ClientInit(char* name, char* date, char* address) {
-    Client buf;
-
-    if (strlen(name) == 0 || strlen(date) != LenDate - 1 || strlen(address) == 0) {
-        exit(-1);
-    }
-    else {
-        buf.name = name;
-        buf.date = date;
-        buf.address = address;
-    }
-    return buf;
+    return Author(name, date, country);
 }
 
 Client ClientInput() { // ввод клиента (читателя)
@@ -138,22 +216,7 @@ Client ClientInput() { // ввод клиента (читателя)
     puts("Введите адрес проживания читателя");
     gets_s(address, Len);
 
-    Client buf = ClientInit(name, date, address);
-    return buf;
-}
-
-Book BookInit(char* name, Author author, int year) {
-    Book buf;
-
-    if (strlen(name) == 0 || year < 1000) {
-        exit(-1);
-    }
-    else {
-        buf.name = name;
-        buf.author = author;
-        buf.year = year;
-    }
-    return buf;
+    return Client(name, date, address);
 }
 
 Book BookInput(Author author) {
@@ -171,24 +234,7 @@ Book BookInput(Author author) {
     } while (year < 1000);
     wait();
 
-    Book buf = BookInit(name, author, year);
-    return buf;
-}
-
-Operation OperationInit(char* move, char* date, Book book, Client client) {
-    Operation buf;
-
-    if (strlen(move) == 0 || strlen(date) != LenDate - 1) {
-        exit(-1);
-    }
-    else {
-        buf.book = book;
-        buf.client = client;
-        buf.move = move;
-        buf.date = date;
-    }
-
-    return buf;
+    return Book(name, author, year);
 }
 
 Operation OperationInput(Book book, Client client) {
@@ -200,29 +246,7 @@ Operation OperationInput(Book book, Client client) {
     puts("Введите дату совершения операции");
     gets_s(date, LenDate);
 
-    Operation buf = OperationInit(move, date, book, client);
-    return buf;
-}
-
-Library LibraryInit(Book book, Client client, Operation operation, char* address) {
-    if (strlen(address) == 0) {
-        exit(-1);
-    }
-    else {
-        Library buf;
-        buf.address = address;
-
-        buf.book = (Book*)malloc(sizeof(Book));
-        buf.book[buf.NumBooks - 1] = book;
-
-        buf.operations = (Operation*)malloc(sizeof(Operation));
-        buf.operations[buf.NumOperations - 1] = operation;
-
-        buf.readers = (Client*)malloc(sizeof(Client));
-        buf.readers[buf.NumReaders - 1] = client;
-
-        return buf;
-    }
+    return Operation(move, date, book, client);
 }
 
 Library LibraryInp(Book book, Client client, Operation operation) {
@@ -231,8 +255,7 @@ Library LibraryInp(Book book, Client client, Operation operation) {
     puts("Введите адрес библиотеки");
     gets_s(address, Len);
 
-    Library buf = LibraryInit(book, client, operation, address);
-    return buf;
+    return Library(book, client, operation, address);
 }
 
 // Дополнительные функции
