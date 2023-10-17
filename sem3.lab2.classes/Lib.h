@@ -10,6 +10,10 @@
 // Классы
 
 class Author {
+private:
+    char* name;
+    char* date;
+    char* country;
 public:
     Author() {
         char* name = (char*)calloc(Len, sizeof(char));
@@ -33,9 +37,9 @@ public:
                 exit(-1);
             }
             else {
-                this->name = name;
-                this->date = date;
-                this->country = country;
+                SetName(name);
+                SetDate(date);
+                SetCountry(country);
             }
         }
     }
@@ -50,12 +54,22 @@ public:
     char* GetCountry() {
         return country;
     }
-    char* name;
-    char* date;
-    char* country;
+    void SetName(char* name) {
+        this->name = name;
+    }
+    void SetDate(char* date) {
+        this->date = date;
+    }
+    void SetCountry(char* country) {
+        this->country = country;
+    }
 };
 
 class Client {
+private:
+    char* name;
+    char* date;
+    char* address;
 public:
     Client() {
     }
@@ -84,16 +98,23 @@ public:
     char* GetAddress() {
         return address;
     }
-    char* name;
-    char* date;
-    char* address;
+    void SetName(char* name) {
+        this->name = name;
+    }
+    void SetDate(char* date) {
+        this->date = date;
+    }
+    void SetAddress(char* address) {
+        this->address = address;
+    }
 };
 
 class Book {
-public:
-    char* name;
-    class Author author;
+private:
     int year;
+    char* name;
+public:
+    class Author author;
     Book() {
     }
     Book(Author author) {
@@ -113,9 +134,24 @@ public:
     }
     ~Book() {
     }
+    char* GetName() {
+        return name;
+    }
+    int GetYear() {
+        return year;
+    }
+    void SetName(char* name) {
+        this->name = name;
+    }
+    void SetYear(int year) {
+        this->year = year;
+    }
 };
 
 class Operation {
+private:
+    char* move;
+    char* date;
 public:
     Operation(char* move, char* date, Book book, Client client) {
         if (strlen(move) == 0 || strlen(date) != LenDate - 1) {
@@ -130,13 +166,25 @@ public:
     }
     ~Operation() {
     }
-    char* move;
-    char* date;
+    char* GetMove() {
+        return move;
+    }
+    char* GetDate() {
+        return date;
+    }
+    void SetMove(char* move) {
+        this->move = move;
+    }
+    void SetName(char* date) {
+        this->date = date;
+    }
     class Book book;
     class Client client;
 };
 
 class Library {
+private:
+    char* address;
 public:
     int NumBooks = 1;
     int NumReaders = 1;
@@ -162,7 +210,12 @@ public:
     class Book* book;
     class Client* readers;
     class Operation* operations;
-    char* address;
+    char* GetAddress() {
+        return address;
+    }
+    void SetAddress(char* address) {
+        this->address = address;
+    }
 };
 
 // Вспомогательные функции
@@ -261,30 +314,31 @@ Library LibraryInp(Book book, Client client, Operation operation) {
 // Дополнительные функции
 
 void PrintAuthor(Author author) { // вывод информации об авторе
-    puts(author.name);
-    puts(author.date);
+    puts(author.GetName());
+    puts(author.GetCountry());
+    puts(author.GetDate());
 }
 
 void PrintBook(Book book) {
-    puts(book.name);
-    printf("%d\n", book.year);
-    puts(book.author.country);
-    puts(book.author.name);
-    puts(book.author.date);
+    puts(book.GetName());
+    printf("%d\n", book.GetYear());
+    puts(book.author.GetCountry());
+    puts(book.author.GetName());
+    puts(book.author.GetDate());
 }
 
 void PrintLibrary(Library library) {
     puts("\nБиблиотека:\n\nПривязанные книги : ");
     for (int i = 0; i < library.NumBooks; i++) {
-        printf("\"%s\", автор - %s, год издания - %d\n", library.book[i].name, library.book[i].author.name, library.book[i].year);
+        printf("\"%s\", автор - %s, год издания - %d\n", library.book[i].GetName(), library.book[i].author.GetName(), library.book[i].GetYear());
     }
     puts("\nПривязанные читатели : ");
     for (int i = 0; i < library.NumReaders; i++) {
-        printf("Имя: %s, дата рождения: %s, проживает по адресу - %s\n", library.readers[i].name, library.readers[i].date, library.readers[i].address);
+        printf("Имя: %s, дата рождения: %s, проживает по адресу - %s\n", library.readers[i].GetName(), library.readers[i].GetDate(), library.readers[i].GetAddress());
     }
     puts("\nОперации в библиотеке : ");
     for (int i = 0; i < library.NumOperations; i++) {
-        printf("Книга \"%s\", читатель: %s, Дата совершения операции: %s, Тип операции: %s\n", library.operations[i].book.name, library.operations[i].client.name, library.operations[i].date, library.operations[i].move);
+        printf("Книга \"%s\", читатель: %s, Дата совершения операции: %s, Тип операции: %s\n", library.operations[i].book.GetName(), library.operations[i].client.GetName(), library.operations[i].GetDate(), library.operations[i].GetMove());
     }
     puts("");
 }
