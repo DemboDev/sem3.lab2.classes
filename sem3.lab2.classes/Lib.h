@@ -63,6 +63,11 @@ public:
     void SetCountry(char* country) {
         this->country = country;
     }
+    void PrintAuthor() { // вывод информации об авторе
+        puts(this->GetName());
+        puts(this->GetCountry());
+        puts(this->GetDate());
+    }
 };
 
 class Client {
@@ -144,7 +149,14 @@ public:
         this->name = name;
     }
     void SetYear(int year) {
-        this->year = year;
+        year = year;
+    }
+    void PrintBook() {
+        puts(this->GetName());
+        printf("%d\n", this->GetYear());
+        puts(this->author.GetCountry());
+        puts(this->author.GetName());
+        puts(this->author.GetDate());
     }
 };
 
@@ -215,6 +227,37 @@ public:
     }
     void SetAddress(char* address) {
         this->address = address;
+    }
+    void AddBookToLibrary(Book book) {
+        this->NumBooks += 1;
+        this->book = (Book*)realloc(this->book, sizeof(Book) * this->NumBooks);
+        this->book[this->NumBooks - 1] = book;
+    }
+    void AddReaderToLibrary(Client reader) {
+        this->NumReaders += 1;
+        this->readers = (Client*)realloc(this->readers, sizeof(Client) * this->NumReaders);
+        this->readers[this->NumReaders - 1] = reader;
+    }
+
+    void AddOperationToLibrary(Operation operation) {
+        this->NumOperations += 1;
+        this->operations = (Operation*)realloc(this->operations, sizeof(Operation) * this->NumOperations);
+        this->operations[this->NumOperations - 1] = operation;
+    }
+    void PrintLibrary() {
+        puts("\nБиблиотека:\n\nПривязанные книги : ");
+        for (int i = 0; i < this->NumBooks; i++) {
+            printf("\"%s\", автор - %s, год издания - %d\n", this->book[i].GetName(), this->book[i].author.GetName(), this->book[i].GetYear());
+        }
+        puts("\nПривязанные читатели : ");
+        for (int i = 0; i < this->NumReaders; i++) {
+            printf("Имя: %s, дата рождения: %s, проживает по адресу - %s\n", this->readers[i].GetName(), this->readers[i].GetDate(), this->readers[i].GetAddress());
+        }
+        puts("\nОперации в библиотеке : ");
+        for (int i = 0; i < this->NumOperations; i++) {
+            printf("Книга \"%s\", читатель: %s, Дата совершения операции: %s, Тип операции: %s\n", this->operations[i].book.GetName(), this->operations[i].client.GetName(), this->operations[i].GetDate(), this->operations[i].GetMove());
+        }
+        puts("");
     }
 };
 
@@ -309,57 +352,4 @@ Library LibraryInp(Book book, Client client, Operation operation) {
     gets_s(address, Len);
 
     return Library(book, client, operation, address);
-}
-
-// Дополнительные функции
-
-void PrintAuthor(Author author) { // вывод информации об авторе
-    puts(author.GetName());
-    puts(author.GetCountry());
-    puts(author.GetDate());
-}
-
-void PrintBook(Book book) {
-    puts(book.GetName());
-    printf("%d\n", book.GetYear());
-    puts(book.author.GetCountry());
-    puts(book.author.GetName());
-    puts(book.author.GetDate());
-}
-
-void PrintLibrary(Library library) {
-    puts("\nБиблиотека:\n\nПривязанные книги : ");
-    for (int i = 0; i < library.NumBooks; i++) {
-        printf("\"%s\", автор - %s, год издания - %d\n", library.book[i].GetName(), library.book[i].author.GetName(), library.book[i].GetYear());
-    }
-    puts("\nПривязанные читатели : ");
-    for (int i = 0; i < library.NumReaders; i++) {
-        printf("Имя: %s, дата рождения: %s, проживает по адресу - %s\n", library.readers[i].GetName(), library.readers[i].GetDate(), library.readers[i].GetAddress());
-    }
-    puts("\nОперации в библиотеке : ");
-    for (int i = 0; i < library.NumOperations; i++) {
-        printf("Книга \"%s\", читатель: %s, Дата совершения операции: %s, Тип операции: %s\n", library.operations[i].book.GetName(), library.operations[i].client.GetName(), library.operations[i].GetDate(), library.operations[i].GetMove());
-    }
-    puts("");
-}
-
-Library AddBookToLibrary(Library library, Book book) {
-    library.NumBooks += 1;
-    library.book = (Book*)realloc(library.book, sizeof(Book) * library.NumBooks);
-    library.book[library.NumBooks - 1] = book;
-    return library;
-}
-
-Library AddReaderToLibrary(Library library, Client reader) {
-    library.NumReaders += 1;
-    library.readers = (Client*)realloc(library.readers, sizeof(Client) * library.NumReaders);
-    library.readers[library.NumReaders - 1] = reader;
-    return library;
-}
-
-Library AddOperationToLibrary(Library library, Operation operation) {
-    library.NumOperations += 1;
-    library.operations = (Operation*)realloc(library.operations, sizeof(Operation) * library.NumOperations);
-    library.operations[library.NumOperations - 1] = operation;
-    return library;
 }
