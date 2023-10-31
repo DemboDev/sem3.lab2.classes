@@ -19,22 +19,22 @@ int main()
     int exit = 0; char n;
     do {
         system("cls");
-        PrintLibrary(library);
+        library.PrintLibrary();
         puts("Библиотека создана. . .");
         puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Выйти из программы\n");
         n = vvod('1', '4');
         switch (n) {
         case '1':
-            library = AddBookToLibrary(library, BookInput(AuthorInput()));
-            PrintLibrary(library);
+            library.AddBookToLibrary(BookInput(AuthorInput()));
+            library.PrintLibrary();
             break;
         case '2':
-            library = AddReaderToLibrary(library, ClientInput());
-            PrintLibrary(library);
+            library.AddReaderToLibrary(ClientInput());
+            library.PrintLibrary();
             break;
         case '3':
-            library = AddOperationToLibrary(library, OperationInput(BookInput(AuthorInput()), ClientInput()));
-            PrintLibrary(library);
+            library.AddOperationToLibrary(OperationInput(BookInput(AuthorInput()), ClientInput()));
+            library.PrintLibrary();
             break;
         case '4':
             exit = 1;
