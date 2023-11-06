@@ -4,30 +4,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <conio.h>
-
+#include <string>
+using namespace std;
+using std::sin;
 // Классы
 
 class Author {
 private:
-    char* name;
-    char* date;
-    char* country;
+    string name;
+    string date;
+    string country;
 public:
     static const int Len = 30;
     static const int LenDate = 11;
     Author() {
-        char* name = (char*)calloc(Len, sizeof(char));
-        strcpy(name, "Иван Иванович Иванов\0");
-        char* date = (char*)calloc(LenDate, sizeof(char));
-        strcpy(date, "11.11.1911");
-        char* country = (char*)calloc(Len, sizeof(char));
-        strcpy(country, "Россия\0");
     }
-    Author(char* name, char* date, char* country) {
-        if (strlen(name) == 0 || strlen(country) == 0) {
+    Author(string name, string date, string country) {
+        if (name.empty() || country.empty()) {
             exit(-1);
         }
-        else if (strlen(date) != LenDate - 1) {
+        else if (date.length() != LenDate - 1) {
             puts("Я тупой прост немножко");
             exit(-1);
         }
@@ -45,36 +41,36 @@ public:
     }
     ~Author() {
     }
-    char* GetName() {
+    string GetName() {
         return name;
     }
-    char* GetDate() {
+    string GetDate() {
         return date;
     }
-    char* GetCountry() {
+    string GetCountry() {
         return country;
     }
-    void SetName(char* name) {
+    void SetName(string name) {
         this->name = name;
     }
-    void SetDate(char* date) {
+    void SetDate(string date) {
         this->date = date;
     }
-    void SetCountry(char* country) {
+    void SetCountry(string country) {
         this->country = country;
     }
     void PrintAuthor() { // вывод информации об авторе
-        puts(this->GetName());
-        puts(this->GetCountry());
-        puts(this->GetDate());
+        puts(this->GetName().c_str());
+        puts(this->GetCountry().c_str());
+        puts(this->GetDate().c_str());
     }
 };
 
 class Client {
 private:
-    char* name;
-    char* date;
-    char* address;
+    string name;
+    string date;
+    string address;
     static int nClients;
 public:
     static int getCount() {
@@ -85,15 +81,13 @@ public:
     Client() {
         nClients++;
     }
-    Client(char* name) {
+    Client(string name) {
         nClients++;
         this->name = name;
-        strcpy(this->date, "11.11.1911\0");
-        strcpy(this->address, "Россия\0");
     }
-    Client(char* name, char* date, char* address) {
+    Client(string name, string date, string address) {
         nClients++;
-        if (strlen(name) == 0 || strlen(date) != LenDate - 1 || strlen(address) == 0) {
+        if (name.empty() || date.length() != LenDate - 1 || address.empty()) {
             exit(-1);
         }
         else {
@@ -103,32 +97,32 @@ public:
         }
     }
     ~Client() {
-    }char* GetName() {
+    }string GetName() {
         return name;
     }
-    char* GetDate() {
+    string GetDate() {
         return date;
     }
-    char* GetAddress() {
+    string GetAddress() {
         return address;
     }
-    void SetName(char* name) {
+    void SetName(string name) {
         this->name = name;
     }
-    void SetDate(char* date) {
+    void SetDate(string date) {
         this->date = date;
     }
-    void SetAddress(char* address) {
+    void SetAddress(string address) {
         this->address = address;
     }
 };
 
-int Client::nClients = 0;
+int Client::nClients = -1;
 
 class Book {
 private:
     int year;
-    char* name;
+    string name;
     static int nBooks;
 public:
     static int getCount() {
@@ -142,13 +136,10 @@ public:
     }
     Book(Author author) {
         nBooks++;
-        strcpy(this->name, "Захар Беляков");
-        this->year = 2000;
-        this->author = author;
     }
-    Book(char* name, Author author, int year) {
+    Book(string name, Author author, int year) {
         nBooks++;
-        if (strlen(name) == 0 || year < 1000) {
+        if (name.empty() || year < 1000) {
             exit(-1);
         }
         else {
@@ -159,33 +150,26 @@ public:
     }
     ~Book() {
     }
-    char* GetName() {
+    string GetName() {
         return name;
     }
     int GetYear() {
         return year;
     }
-    void SetName(char* name) {
+    void SetName(string name) {
         this->name = name;
     }
     void SetYear(int year) {
         year = year;
     }
-    void PrintBook() {
-        puts(this->GetName());
-        printf("%d\n", this->GetYear());
-        puts(this->author.GetCountry());
-        puts(this->author.GetName());
-        puts(this->author.GetDate());
-    }
 };
 
-int Book::nBooks = 0;
+int Book::nBooks = -1;
 
 class Operation {
 private:
-    char* move;
-    char* date;
+    string move;
+    string date;
     static int nOperations;
 public:
     static int getCount() {
@@ -196,9 +180,9 @@ public:
     Operation() {
         nOperations++;
     }
-    Operation(char* move, char* date, Book book, Client client) {
+    Operation(string move, string date, Book book, Client client) {
         nOperations++;
-        if (strlen(move) == 0 || strlen(date) != LenDate - 1) {
+        if (move.empty() || date.length() != LenDate - 1) {
             exit(-1);
         }
         else {
@@ -210,27 +194,27 @@ public:
     }
     ~Operation() {
     }
-    char* GetMove() {
+    string GetMove() {
         return move;
     }
-    char* GetDate() {
+    string GetDate() {
         return date;
     }
-    void SetMove(char* move) {
+    void SetMove(string move) {
         this->move = move;
     }
-    void SetDate(char* date) {
+    void SetDate(string date) {
         this->date = date;
     }
-    class Book book;
-    class Client client;
+    Book book;
+    Client client;
 };
 
 int Operation::nOperations = 0;
 
 class Library {
 private:
-    char* address;
+    string address;
 public:
     static const int Len = 40;
     static const int LenDate = 11;
@@ -238,8 +222,8 @@ public:
     int NumReaders = 1;
     int NumOperations = 1;
     Library(){}
-    Library(Book book, Client client, Operation operation, char* address) {
-        if (strlen(address) == 0) {
+    Library(Book book, Client client, Operation operation, string address) {
+        if (address.empty()) {
             exit(-1);
         }
         else {
@@ -259,10 +243,10 @@ public:
     class Book* book;
     class Client* readers;
     class Operation* operations;
-    char* GetAddress() {
+    string GetAddress() {
         return address;
     }
-    void SetAddress(char* address) {
+    void SetAddress(string address) {
         this->address = address;
     }
     void AddBookToLibrary(Book book) {
@@ -316,20 +300,19 @@ void wait() {
 Author AuthorInput() { // ввод автора
     int Len = Author::Len;
     int LenDate = Author::LenDate;
-    char* name = (char*)calloc(Len, sizeof(char));
-    char* date = (char*)calloc(LenDate + 1, sizeof(char));
-    char* country = (char*)calloc(Len, sizeof(char));
-
+    string name;
+    string date;
+    string country;
     puts("Введите имя автора");
-    gets_s(name, Len);
+    cin >> name;
     do {
         do {
             puts("Введите дату рождения автора в формате DD.MM.YYYY");
-            gets_s(date, LenDate);
+            cin >> date;
         } while (date[0] < '0' || date[0] > '3' || date[1] < '0' || (date[1] > '1' && date[0] > '2') || date[1] > '9' || date[2] != '.' || date[3] < '0' || (date[3] == '1' && date[4] > '2') || date[3] > '1' || date[4] < '0' || (date[4] > '0' && date[3] > '2') || date[4] > '9' || date[5] != '.' || date[6] < '0' || date[6] > '9' || date[7] < '0' || date[7] > '9' || date[8] < '0' || date[8] > '9' || date[9] < '0' || date[9] > '9');
-    } while (strlen(date) != 10);
+    } while (date.length() != LenDate);
     puts("Введите страну происхождения автора");
-    gets_s(country, Len);
+    cin >> country;
 
     return Author(name, date, country);
 }
@@ -337,20 +320,20 @@ Author AuthorInput() { // ввод автора
 Client ClientInput() { // ввод клиента (читателя)
     int Len = Client::Len;
     int LenDate = Client::LenDate;
-    char* name = (char*)calloc(Len, sizeof(char));
-    char* date = (char*)calloc(LenDate + 1, sizeof(char));
-    char* address = (char*)calloc(Len, sizeof(char));
+    string name;
+    string date;
+    string address;
 
     puts("Введите имя читателя");
-    gets_s(name, Len);
+    cin >> name;
     do {
         do {
             puts("Введите дату рождения читателя в формате DD.MM.YYYY");
-            gets_s(date, LenDate);
+            cin >> date;
         } while (date[0] < '0' || date[0] > '3' || date[1] < '0' || (date[1] > '1' && date[0] > '2') || date[1] > '9' || date[2] != '.' || date[3] < '0' || (date[3] == '1' && date[4] > '2') || date[3] > '1' || date[4] < '0' || (date[4] > '0' && date[3] > '2') || date[4] > '9' || date[5] != '.' || date[6] < '0' || date[6] > '9' || date[7] < '0' || date[7] > '9' || date[8] < '0' || date[8] > '9' || date[9] < '0' || date[9] > '9');
-    } while (strlen(date) != 10);
+    } while (date.length() != 10);
     puts("Введите адрес проживания читателя");
-    gets_s(address, Len);
+    cin >> address;
 
     return Client(name, date, address);
 }
@@ -359,10 +342,10 @@ Book BookInput(Author author) {
     int Len = Book::Len;
     int LenDate = Book::LenDate;
     int year;
-    char* name = (char*)calloc(Len, sizeof(char));
+    string name;
 
     puts("Введите название книги");
-    gets_s(name, Len);
+    cin >> name;
     puts("Введите год издания книги");
     do {
         scanf("%d", &year);
@@ -378,13 +361,17 @@ Book BookInput(Author author) {
 Operation OperationInput(Book book, Client client) {
     int Len = Operation::Len;
     int LenDate = Operation::LenDate;
-    char* move = (char*)calloc(Len, sizeof(char));
-    char* date = (char*)calloc(LenDate + 1, sizeof(char));
+    string move;
+    string date;
 
     puts("Введите тип совершённой операции");
-    gets_s(move, Len);
-    puts("Введите дату совершения операции");
-    gets_s(date, LenDate);
+    cin >> move;
+    do {
+        do {
+            puts("Введите дату совершения операции в формате DD.MM.YYYY");
+            cin >> date;
+        } while (date[0] < '0' || date[0] > '3' || date[1] < '0' || (date[1] > '1' && date[0] > '2') || date[1] > '9' || date[2] != '.' || date[3] < '0' || (date[3] == '1' && date[4] > '2') || date[3] > '1' || date[4] < '0' || (date[4] > '0' && date[3] > '2') || date[4] > '9' || date[5] != '.' || date[6] < '0' || date[6] > '9' || date[7] < '0' || date[7] > '9' || date[8] < '0' || date[8] > '9' || date[9] < '0' || date[9] > '9');
+    } while (date.length() != 10);
 
     return Operation(move, date, book, client);
 }
@@ -392,10 +379,10 @@ Operation OperationInput(Book book, Client client) {
 Library LibraryInp(Book book, Client client, Operation operation) {
     int Len = Library::Len;
     int LenDate = Library::LenDate;
-    char* address = (char*)calloc(Len, sizeof(char));
+    string address;
 
     puts("Введите адрес библиотеки");
-    gets_s(address, Len);
+    cin >> address;
 
     return Library(book, client, operation, address);
 }
