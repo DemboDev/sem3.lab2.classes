@@ -23,22 +23,24 @@ int main()
         puts("Библиотека создана. . .");
         puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Выйти из программы\n");
         n = vvod('1', '4');
-        switch (n) {
-        case '1':
+        if (n == '1') {
             library.AddBookToLibrary(BookInput(AuthorInput()));
             library.PrintLibrary();
-            break;
-        case '2':
+        }
+        if (n == '2') {
             library.AddReaderToLibrary(ClientInput());
             library.PrintLibrary();
-            break;
-        case '3':
-            library.AddOperationToLibrary(OperationInput(BookInput(AuthorInput()), ClientInput()));
+        }
+        if (n == '3') {
+            Book b = BookInput(AuthorInput());
+            Client c = ClientInput();
+            library.AddBookToLibrary(b);
+            library.AddReaderToLibrary(c);
+            library.AddOperationToLibrary(OperationInput(b, c));
             library.PrintLibrary();
-            break;
-        case '4':
+        }
+        if (n == '4') {
             exit = 1;
-            break;
         }
     } while (exit == 0);
 

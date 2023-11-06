@@ -75,17 +75,24 @@ private:
     char* name;
     char* date;
     char* address;
+    static int nClients;
 public:
+    static int getCount() {
+        return nClients;
+    }
     static const int Len = 40;
     static const int LenDate = 11;
     Client() {
+        nClients++;
     }
     Client(char* name) {
+        nClients++;
         this->name = name;
         strcpy(this->date, "11.11.1911\0");
         strcpy(this->address, "Россия\0");
     }
     Client(char* name, char* date, char* address) {
+        nClients++;
         if (strlen(name) == 0 || strlen(date) != LenDate - 1 || strlen(address) == 0) {
             exit(-1);
         }
@@ -116,22 +123,31 @@ public:
     }
 };
 
+int Client::nClients = 0;
+
 class Book {
 private:
     int year;
     char* name;
+    static int nBooks;
 public:
+    static int getCount() {
+        return nBooks;
+    }
     static const int Len = 30;
     static const int LenDate = 11;
     class Author author;
     Book() {
+        nBooks++;
     }
     Book(Author author) {
+        nBooks++;
         strcpy(this->name, "Захар Беляков");
         this->year = 2000;
         this->author = author;
     }
     Book(char* name, Author author, int year) {
+        nBooks++;
         if (strlen(name) == 0 || year < 1000) {
             exit(-1);
         }
@@ -164,16 +180,24 @@ public:
     }
 };
 
+int Book::nBooks = 0;
+
 class Operation {
 private:
     char* move;
     char* date;
+    static int nOperations;
 public:
+    static int getCount() {
+        return nOperations;
+    }
     static const int Len = 10;
     static const int LenDate = 11;
     Operation() {
+        nOperations++;
     }
     Operation(char* move, char* date, Book book, Client client) {
+        nOperations++;
         if (strlen(move) == 0 || strlen(date) != LenDate - 1) {
             exit(-1);
         }
@@ -201,6 +225,8 @@ public:
     class Book book;
     class Client client;
 };
+
+int Operation::nOperations = 0;
 
 class Library {
 private:
@@ -256,15 +282,15 @@ public:
         this->operations[this->NumOperations - 1] = operation;
     }
     void PrintLibrary() {
-        puts("\nБиблиотека:\n\nПривязанные книги : ");
+        printf("\nБиблиотека:\n\nПривязанные книги (%d): \n", Book::getCount());
         for (int i = 0; i < this->NumBooks; i++) {
             printf("\"%s\", автор - %s, год издания - %d\n", this->book[i].GetName(), this->book[i].author.GetName(), this->book[i].GetYear());
         }
-        puts("\nПривязанные читатели : ");
+        printf("\nПривязанные читатели (%d): \n", Client::getCount());
         for (int i = 0; i < this->NumReaders; i++) {
             printf("Имя: %s, дата рождения: %s, проживает по адресу - %s\n", this->readers[i].GetName(), this->readers[i].GetDate(), this->readers[i].GetAddress());
         }
-        puts("\nОперации в библиотеке : ");
+        printf("\nОперации в библиотеке (%d): \n", Operation::getCount());
         for (int i = 0; i < this->NumOperations; i++) {
             printf("Книга \"%s\", читатель: %s, Дата совершения операции: %s, Тип операции: %s\n", this->operations[i].book.GetName(), this->operations[i].client.GetName(), this->operations[i].GetDate(), this->operations[i].GetMove());
         }
