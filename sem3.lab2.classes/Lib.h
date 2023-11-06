@@ -1,6 +1,4 @@
 #pragma once
-#define Len 30
-#define LenDate 11
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
@@ -15,6 +13,8 @@ private:
     char* date;
     char* country;
 public:
+    static const int Len = 30;
+    static const int LenDate = 11;
     Author() {
         char* name = (char*)calloc(Len, sizeof(char));
         strcpy(name, "Иван Иванович Иванов\0");
@@ -76,6 +76,8 @@ private:
     char* date;
     char* address;
 public:
+    static const int Len = 30;
+    static const int LenDate = 11;
     Client() {
     }
     Client(char* name) {
@@ -119,6 +121,8 @@ private:
     int year;
     char* name;
 public:
+    static const int Len = 30;
+    static const int LenDate = 11;
     class Author author;
     Book() {
     }
@@ -165,6 +169,8 @@ private:
     char* move;
     char* date;
 public:
+    static const int Len = 30;
+    static const int LenDate = 11;
     Operation(char* move, char* date, Book book, Client client) {
         if (strlen(move) == 0 || strlen(date) != LenDate - 1) {
             exit(-1);
@@ -198,6 +204,8 @@ class Library {
 private:
     char* address;
 public:
+    static const int Len = 30;
+    static const int LenDate = 11;
     int NumBooks = 1;
     int NumReaders = 1;
     int NumOperations = 1;
@@ -276,8 +284,9 @@ void wait() {
 }
 
 // Основные функции
-
 Author AuthorInput() { // ввод автора
+    int Len = 30;
+    int LenDate = 11;
     char* name = (char*)calloc(Len, sizeof(char));
     char* date = (char*)calloc(LenDate + 1, sizeof(char));
     char* country = (char*)calloc(Len, sizeof(char));
@@ -297,6 +306,8 @@ Author AuthorInput() { // ввод автора
 }
 
 Client ClientInput() { // ввод клиента (читателя)
+    int Len = 30;
+    int LenDate = 11;
     char* name = (char*)calloc(Len, sizeof(char));
     char* date = (char*)calloc(LenDate + 1, sizeof(char));
     char* address = (char*)calloc(Len, sizeof(char));
@@ -316,6 +327,8 @@ Client ClientInput() { // ввод клиента (читателя)
 }
 
 Book BookInput(Author author) {
+    int Len = 30;
+    int LenDate = 11;
     int year;
     char* name = (char*)calloc(Len, sizeof(char));
 
@@ -334,6 +347,8 @@ Book BookInput(Author author) {
 }
 
 Operation OperationInput(Book book, Client client) {
+    int Len = 30;
+    int LenDate = 11;
     char* move = (char*)calloc(Len, sizeof(char));
     char* date = (char*)calloc(LenDate + 1, sizeof(char));
 
@@ -346,6 +361,8 @@ Operation OperationInput(Book book, Client client) {
 }
 
 Library LibraryInp(Book book, Client client, Operation operation) {
+    int Len = 30;
+    int LenDate = 11;
     char* address = (char*)calloc(Len, sizeof(char));
 
     puts("Введите адрес библиотеки");
