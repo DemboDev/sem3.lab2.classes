@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <conio.h>
 #include <string>
+#include <vector>
 using namespace std;
-using std::sin;
 // Классы
 
 class Author {
@@ -216,6 +216,9 @@ class Library {
 private:
     string address;
 public:
+    vector <Book> book;
+    vector <Client> readers;
+    vector <Operation> operations;
     static const int Len = 40;
     static const int LenDate = 11;
     int NumBooks = 1;
@@ -229,20 +232,14 @@ public:
         else {
             this->address = address;
 
-            this->book = (Book*)malloc(sizeof(Book));
-            this->book[this->NumBooks - 1] = book;
+            this->book.push_back(book);
 
-            this->operations = (Operation*)malloc(sizeof(Operation));
-            this->operations[this->NumOperations - 1] = operation;
+            this->operations.push_back(operation);
 
-            this->readers = (Client*)malloc(sizeof(Client));
-            this->readers[this->NumReaders - 1] = client;
+            this->readers.push_back(client);
         }
     }
     ~Library(){}
-    class Book* book;
-    class Client* readers;
-    class Operation* operations;
     string GetAddress() {
         return address;
     }
@@ -251,32 +248,29 @@ public:
     }
     void AddBookToLibrary(Book book) {
         this->NumBooks += 1;
-        this->book = (Book*)realloc(this->book, sizeof(Book) * this->NumBooks);
-        this->book[this->NumBooks - 1] = book;
+        this->book.push_back(book);
     }
     void AddReaderToLibrary(Client reader) {
         this->NumReaders += 1;
-        this->readers = (Client*)realloc(this->readers, sizeof(Client) * this->NumReaders);
-        this->readers[this->NumReaders - 1] = reader;
+        this->readers.push_back(reader);
     }
 
     void AddOperationToLibrary(Operation operation) {
         this->NumOperations += 1;
-        this->operations = (Operation*)realloc(this->operations, sizeof(Operation) * this->NumOperations);
-        this->operations[this->NumOperations - 1] = operation;
+        this->operations.push_back(operation);
     }
     void PrintLibrary() {
         printf("\nБиблиотека:\n\nПривязанные книги (%d): \n", Book::getCount());
         for (int i = 0; i < this->NumBooks; i++) {
-            printf("\"%s\", автор - %s, год издания - %d\n", this->book[i].GetName(), this->book[i].author.GetName(), this->book[i].GetYear());
+            cout << "\"" << this->book.at(i).GetName() << "\", автор - " << this->book.at(i).author.GetName() << ", год издания - " << this->book.at(i).GetYear() << "\n";
         }
         printf("\nПривязанные читатели (%d): \n", Client::getCount());
         for (int i = 0; i < this->NumReaders; i++) {
-            printf("Имя: %s, дата рождения: %s, проживает по адресу - %s\n", this->readers[i].GetName(), this->readers[i].GetDate(), this->readers[i].GetAddress());
+            cout << "Имя: " << this->readers.at(i).GetName() << ", дата рождения:" << this->readers.at(i).GetDate() << ", проживает по адресу - " << this->readers.at(i).GetAddress() << "\n";
         }
         printf("\nОперации в библиотеке (%d): \n", Operation::getCount());
         for (int i = 0; i < this->NumOperations; i++) {
-            printf("Книга \"%s\", читатель: %s, Дата совершения операции: %s, Тип операции: %s\n", this->operations[i].book.GetName(), this->operations[i].client.GetName(), this->operations[i].GetDate(), this->operations[i].GetMove());
+            cout << "Книга \"" << this->operations.at(i).book.GetName() << "\", читатель: " << this->operations.at(i).client.GetName() << ", Дата совершения операции: " << this->operations.at(i).GetDate() << ", Тип операции: " << this->operations.at(i).GetMove() << "\n";
         }
         puts("");
     }
@@ -310,7 +304,7 @@ Author AuthorInput() { // ввод автора
             puts("Введите дату рождения автора в формате DD.MM.YYYY");
             cin >> date;
         } while (date[0] < '0' || date[0] > '3' || date[1] < '0' || (date[1] > '1' && date[0] > '2') || date[1] > '9' || date[2] != '.' || date[3] < '0' || (date[3] == '1' && date[4] > '2') || date[3] > '1' || date[4] < '0' || (date[4] > '0' && date[3] > '2') || date[4] > '9' || date[5] != '.' || date[6] < '0' || date[6] > '9' || date[7] < '0' || date[7] > '9' || date[8] < '0' || date[8] > '9' || date[9] < '0' || date[9] > '9');
-    } while (date.length() != LenDate);
+    } while (date.length() != 10);
     puts("Введите страну происхождения автора");
     cin >> country;
 
