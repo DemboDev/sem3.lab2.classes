@@ -24,7 +24,8 @@ int main()
         puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Выйти из программы\n");
         n = vvod('1', '4');
         if (n == '1') {
-            library.AddBookToLibrary(BookInput(AuthorInput()));
+            Book b = BookInput(AuthorInput());
+            library + b;
             library.PrintLibrary();
         }
         if (n == '2') {

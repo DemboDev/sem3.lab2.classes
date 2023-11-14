@@ -286,11 +286,11 @@ public:
         }
         puts("");
     }
-    Library operator+(Client& client) {
+    void operator+(Client& client) {
         this->NumReaders += 1;
         this->readers.push_back(client);
     }
-    Library operator+(Book& book) {
+    void operator+(Book& book) {
         this->NumBooks += 1;
         this->book.push_back(book);
     }
