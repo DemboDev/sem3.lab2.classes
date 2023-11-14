@@ -325,9 +325,10 @@ Author AuthorInput() { // ввод автора
             cin >> date;
         } while (date[0] < '0' || date[0] > '3' || date[1] < '0' || (date[1] > '1' && date[0] > '2') || date[1] > '9' || date[2] != '.' || date[3] < '0' || (date[3] == '1' && date[4] > '2') || date[3] > '1' || date[4] < '0' || (date[4] > '0' && date[3] > '2') || date[4] > '9' || date[5] != '.' || date[6] < '0' || date[6] > '9' || date[7] < '0' || date[7] > '9' || date[8] < '0' || date[8] > '9' || date[9] < '0' || date[9] > '9');
     } while (date.length() != 10);
+    wait();
     puts("¬ведите страну происхождени€ автора");
     cin >> country;
-
+    wait();
     return Author(name, date, country);
 }
 
@@ -346,9 +347,10 @@ Client ClientInput() { // ввод клиента (читател€)
             cin >> date;
         } while (date[0] < '0' || date[0] > '3' || date[1] < '0' || (date[1] > '1' && date[0] > '2') || date[1] > '9' || date[2] != '.' || date[3] < '0' || (date[3] == '1' && date[4] > '2') || date[3] > '1' || date[4] < '0' || (date[4] > '0' && date[3] > '2') || date[4] > '9' || date[5] != '.' || date[6] < '0' || date[6] > '9' || date[7] < '0' || date[7] > '9' || date[8] < '0' || date[8] > '9' || date[9] < '0' || date[9] > '9');
     } while (date.length() != 10);
+    wait();
     puts("¬ведите адрес проживани€ читател€");
     cin >> address;
-
+    wait();
     return Client(name, date, address);
 }
 
@@ -386,7 +388,7 @@ Operation OperationInput(Book book, Client client) {
             cin >> date;
         } while (date[0] < '0' || date[0] > '3' || date[1] < '0' || (date[1] > '1' && date[0] > '2') || date[1] > '9' || date[2] != '.' || date[3] < '0' || (date[3] == '1' && date[4] > '2') || date[3] > '1' || date[4] < '0' || (date[4] > '0' && date[3] > '2') || date[4] > '9' || date[5] != '.' || date[6] < '0' || date[6] > '9' || date[7] < '0' || date[7] > '9' || date[8] < '0' || date[8] > '9' || date[9] < '0' || date[9] > '9');
     } while (date.length() != 10);
-
+    wait();
     return Operation(move, date, book, client);
 }
 
@@ -397,6 +399,6 @@ Library LibraryInp(Book book, Client client, Operation operation) {
 
     puts("¬ведите адрес библиотеки");
     cin >> address;
-
+    wait();
     return Library(book, client, operation, address);
 }
