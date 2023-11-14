@@ -73,6 +73,9 @@ private:
     string address;
     static int nClients;
 public:
+    Client operator++(){
+        nClients++;
+    }
     static int getCount() {
         return nClients;
     }
@@ -125,6 +128,9 @@ private:
     string name;
     static int nBooks;
 public:
+    Book operator++(){
+        nBooks++;
+    }
     static int getCount() {
         return nBooks;
     }
@@ -240,6 +246,12 @@ public:
         }
     }
     ~Library(){}
+    int GetNumBooks() {
+        return NumBooks;
+    }
+    int GetNumReaders() {
+        return NumReaders;
+    }
     string GetAddress() {
         return address;
     }
@@ -273,6 +285,14 @@ public:
             cout << "Книга \"" << this->operations.at(i).book.GetName() << "\", читатель: " << this->operations.at(i).client.GetName() << ", Дата совершения операции: " << this->operations.at(i).GetDate() << ", Тип операции: " << this->operations.at(i).GetMove() << "\n";
         }
         puts("");
+    }
+    Library operator+(Client& client) {
+        this->NumReaders += 1;
+        this->readers.push_back(client);
+    }
+    Library operator+(Book& book) {
+        this->NumBooks += 1;
+        this->book.push_back(book);
     }
 };
 

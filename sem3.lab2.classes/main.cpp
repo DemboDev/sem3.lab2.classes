@@ -32,10 +32,45 @@ int main()
             library.PrintLibrary();
         }
         if (n == '3') {
-            Book b = BookInput(AuthorInput());
-            Client c = ClientInput();
-            library.AddBookToLibrary(b);
-            library.AddReaderToLibrary(c);
+            int k;
+            puts("Хотите использовать уже существующую книгу?\n1) Да\n2) Нет");
+            do {
+                scanf("%d", &k);
+            } while (k < 1 || k > 2);
+            Book b;
+            if (k == 1) {
+                system("cls");
+                library.PrintLibrary();
+                puts("Введите номер книги из списка");
+                int nOfBook;
+                do {
+                    scanf("%d", &nOfBook);
+                } while (nOfBook < 1 || nOfBook > library.GetNumBooks());
+                b = library.book.at(nOfBook - 1);
+            }
+            else {
+                b = BookInput(AuthorInput());
+                library.AddBookToLibrary(b);
+            }
+            puts("Хотите использовать уже существующего читателя?\n1) Да\n2) Нет");
+            do {
+                scanf("%d", &k);
+            } while (k < 1 || k > 2);
+            Client c;
+            if (k == 1) {
+                system("cls");
+                library.PrintLibrary();
+                puts("Введите номер читателя из списка");
+                int nOfReader;
+                do {
+                    scanf("%d", &nOfReader);
+                } while (nOfReader < 1 || nOfReader > library.GetNumReaders());
+                c = library.readers.at(nOfReader - 1);
+            }
+            else {
+                c = ClientInput();
+                library.AddReaderToLibrary(c);
+            }
             library.AddOperationToLibrary(OperationInput(b, c));
             library.PrintLibrary();
         }
