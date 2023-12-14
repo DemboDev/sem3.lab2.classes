@@ -17,12 +17,13 @@ int main()
     Operation operation = OperationInput(book, client);
     Library library = LibraryInp(book, client, operation);
     int exit = 0; char n;
+    QueueOfOperations queue;
     do {
         system("cls");
         library.PrintLibrary();
         puts("Библиотека создана. . .");
-        puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Выйти из программы\n");
-        n = vvod('1', '4');
+        puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Выйти из программы\n5) Сортировка и вывод операций по порядку дат\n");
+        n = vvod('1', '5');
         if (n == '1') {
             Book b = BookInput(AuthorInput());
             library + b;
@@ -76,7 +77,18 @@ int main()
             library.PrintLibrary();
         }
         if (n == '4') {
-            exit = 1;
+            int ans;
+            puts("Точно?\n1)Да\n2)Нет");
+            scanf("%d", &ans);
+            if (ans == 1) {
+                exit = 1;
+            }
+        }
+        if (n == '5') {
+            system("cls");
+            transferElements(library, queue);
+            queue.Print();
+            _getch();
         }
     } while (exit == 0);
 

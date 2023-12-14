@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <string>
 #include <vector>
+#include <algorithm>
 using namespace std;
 // Классы
 
@@ -82,7 +83,6 @@ public:
     static const int Len = 40;
     static const int LenDate = 11;
     Client() {
-        nClients++;
     }
     Client(string name) {
         nClients++;
@@ -120,7 +120,7 @@ public:
     }
 };
 
-int Client::nClients = -1;
+int Client::nClients = 0;
 
 class Book {
 private:
@@ -128,20 +128,18 @@ private:
     string name;
     static int nBooks;
 public:
+    static const int Len = 30;
+    static const int LenDate = 11;
+    class Author author;
     Book operator++(){
         nBooks++;
     }
     static int getCount() {
         return nBooks;
     }
-    static const int Len = 30;
-    static const int LenDate = 11;
-    class Author author;
     Book() {
-        nBooks++;
     }
     Book(Author author) {
-        nBooks++;
     }
     Book(string name, Author author, int year) {
         nBooks++;
@@ -170,13 +168,14 @@ public:
     }
 };
 
-int Book::nBooks = -1;
+int Book::nBooks = 0;
 
 class Operation {
 private:
     string move;
     string date;
     static int nOperations;
+    friend bool CompareDates(const string& date1, const string& date2);
 public:
     static int getCount() {
         return nOperations;
@@ -296,6 +295,71 @@ public:
     }
 };
 
+class QueueOfOperations {
+private:
+    vector<Operation> operations;
+    // Дружественная функция для сравнения дат посимвольно
+    friend void transferElements(const Library& operation, QueueOfOperations& operations);
+    void Sort() {
+        int flag;
+        Operation temp;
+        char* str1 = (char*)calloc(20, sizeof(char));
+        char* str2 = (char*)calloc(20, sizeof(char));
+        for (int k = 0; k < operations.size() - 1; k++) {
+            for (int i = 0; i < operations.size() - 1; i++) {
+                flag = 1;
+                strcpy(str1, operations.at(i).GetDate().c_str());
+                strcpy(str2, operations.at(i + 1).GetDate().c_str());
+                for (int j = 6; j <= 9 && flag == 1; j++) {
+                    if (str2[j] > str1[j]) {
+                        flag = 0;
+                    }
+                    if (str2[j] < str1[j]) {
+                        flag = 2;
+                    }
+                }
+                for (int j = 3; j <= 4 && flag == 1; j++) {
+                    if (str2[j] > str1[j]) {
+                        flag = 0;
+                    }
+                    if (str2[j] < str1[j]) {
+                        flag = 2;
+                    }
+                }
+                for (int j = 0; j <= 1 && flag == 1; j++) {
+                    if (str2[j] > str1[j]) {
+                        flag = 0;
+                    }
+                    if (str2[j] < str1[j]) {
+                        flag = 2;
+                    }
+                }
+                if (flag == 0) {
+                    temp = operations.at(i);
+                    operations.at(i) = operations.at(i + 1);
+                    operations.at(i + 1) = temp;
+                }
+            }
+        }
+    }
+public:
+    QueueOfOperations() {
+    }
+    void Print() {
+        for (int i = 0; i < operations.size(); i++) {
+            printf("Дата: %s, Имя читателя: %s, Название книги: %s, Тип операции: %s\n", operations.at(i).GetDate(), operations.at(i).client.GetName(), operations.at(i).book.GetName(), operations.at(i).GetMove());
+        }
+    }
+};
+
+// Реализация дружественной функции
+void transferElements(const Library& source, QueueOfOperations& destination) {
+    for (int i = 0; i < source.operations.size(); i++) {
+        destination.operations.push_back(source.operations.at(i));
+    }
+    destination.Sort();
+}
+
 // Вспомогательные функции
 
 char vvod(char min, char max) { // автоматизировал проверку на допустимость ввода, ввод без нажатия ENTER
@@ -319,6 +383,7 @@ Author AuthorInput() { // ввод автора
     string country;
     puts("Введите имя автора");
     cin >> name;
+    wait();
     do {
         do {
             puts("Введите дату рождения автора в формате DD.MM.YYYY");
@@ -341,6 +406,7 @@ Client ClientInput() { // ввод клиента (читателя)
 
     puts("Введите имя читателя");
     cin >> name;
+    wait();
     do {
         do {
             puts("Введите дату рождения читателя в формате DD.MM.YYYY");
@@ -362,6 +428,7 @@ Book BookInput(Author author) {
 
     puts("Введите название книги");
     cin >> name;
+    wait();
     puts("Введите год издания книги");
     do {
         scanf("%d", &year);
@@ -382,6 +449,7 @@ Operation OperationInput(Book book, Client client) {
 
     puts("Введите тип совершённой операции");
     cin >> move;
+    wait();
     do {
         do {
             puts("Введите дату совершения операции в формате DD.MM.YYYY");
