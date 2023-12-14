@@ -334,7 +334,7 @@ private:
                         flag = 2;
                     }
                 }
-                if (flag == 0) {
+                if (flag == 2) {
                     temp = operations.at(i);
                     operations.at(i) = operations.at(i + 1);
                     operations.at(i + 1) = temp;
@@ -347,8 +347,9 @@ public:
     }
     void Print() {
         for (int i = 0; i < operations.size(); i++) {
-            printf("Дата: %s, Имя читателя: %s, Название книги: %s, Тип операции: %s\n", operations.at(i).GetDate(), operations.at(i).client.GetName(), operations.at(i).book.GetName(), operations.at(i).GetMove());
+            cout << "|" << i + 1 << "| " << "Дата: " << operations.at(i).GetDate() << " Читатель: " << operations.at(i).client.GetName() << " Книга: " << operations.at(i).book.GetName() << " Операция: " << operations.at(i).GetMove() << "\n";
         }
+        operations.clear();
     }
 };
 
