@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <string>
 #include <vector>
+#include <ctype.h>
 #include <algorithm>
 using namespace std;
 // Классы
@@ -85,8 +86,14 @@ public:
     Client() {
     }
     Client(string name) {
-        nClients++;
         this->name = name;
+        for (int i = 0; i < name.length(); i++) {
+            if (name[i] >= '0' && name[i] <= '9') {
+                throw invalid_argument("Неправильный формат данных!\n");
+            }
+        }
+        this->date = 1234;
+        this->address = "RERERERE,13";
     }
     Client(string name, string date, string address) {
         nClients++;
@@ -350,6 +357,63 @@ public:
             cout << "|" << i + 1 << "| " << "Дата: " << operations.at(i).GetDate() << " Читатель: " << operations.at(i).client.GetName() << " Книга: " << operations.at(i).book.GetName() << " Операция: " << operations.at(i).GetMove() << "\n";
         }
         operations.clear();
+    }
+};
+
+// класс для работы с двумерным массивом
+class Collection {
+private:
+    int numOfToms;
+    string name;
+    vector<vector<Book>> books;
+    void SetName(string name) {
+        this->name = name;
+    }
+public:
+    Collection() {
+        string name;
+        puts("Введите название сборника");
+        cin >> name;
+        SetName(name);
+        puts("Сборник создан");
+    }
+    ~Collection() {
+    }
+    void Input() {
+    }
+    void GetInfo() {
+        cout << "В сборнике " << books.size() << " томов" << "\n";
+        for (int i = 0; i < books.size(); i++) {
+            cout << "В томе номер " << i + 1 << ": " << books.at(i).size() << " книг\n";
+        }
+    }
+    void AddBook(int num, Book book) {
+        if (books.size() == num) {
+            vector<Book> b;
+            b.push_back(book);
+            books.push_back(b);
+        }
+        else {
+            books.at(num).push_back(book);
+        }
+    }
+    int GetNumOfToms() {
+        return books.size();
+    }
+    int GetSize(int i) {
+        return books.at(i).size();
+    }
+    string GetName() {
+        return name;
+    }
+    void Print() {
+        cout << "Сборник \"" << this->GetName() << "\": \n";
+        for (int i = 0; i < books.size(); i++) {
+            cout << "\nВ томе номер " << i + 1 << " содержатся следующие книги: \n";
+            for (int j = 0; j < books.at(i).size(); j++) {
+                cout << "\"" << this->books.at(i).at(j).GetName() << "\", автор - " << this->books.at(i).at(j).author.GetName() << ", год издания - " << this->books.at(i).at(j).GetYear() << "\n";
+            }
+        }
     }
 };
 
