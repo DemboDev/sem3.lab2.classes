@@ -173,9 +173,53 @@ public:
     void SetYear(int year) {
         year = year;
     }
+    void Print() {
+        cout << "Название: \"" << name << "\", год издания: " << year << ", Автор: " << author.GetName() << endl;
+    }
 };
 
 int Book::nBooks = 0;
+
+class BookCollection: protected Book {
+    private: vector<string> stories;
+    public: BookCollection(string name, Author author, int year, vector<string> stories) : Book(name, author, year) {
+          nBookColl++;
+          this->stories = stories;
+          }
+          BookCollection(string name, Author author, int year) : Book(name, author, year) {
+              nBookColl++;
+              this->stories = stories;
+          }
+          BookCollection() {
+          }
+          void operator=(Book* book) {
+              SetName(book->GetName());
+              SetYear(book->GetYear());
+              this->author = book->author;
+          }
+          void AddStory(string story) {
+              stories.push_back(story);
+          }
+          void DeleteStory(int i) {
+              for (i; i < stories.size() - 1; i++) {
+                  stories.at(i) = stories.at(i + 1);
+              }
+              stories.pop_back();
+          }
+          void Print() {
+              Book::Print();
+              for (int i = 0; i < stories.size(); i++) {
+                  cout << "Рассказ \"" << stories.at(i) << "\"" << endl;
+              }
+          }
+          static int getCount() {
+              return nBookColl;
+          }
+};
+
+
+
+int nBookColl = 0;
 
 class Operation {
 private:
@@ -231,6 +275,7 @@ public:
     vector <Book> book;
     vector <Client> readers;
     vector <Operation> operations;
+    vector <BookCollection> bookCollections;
     static const int Len = 40;
     static const int LenDate = 11;
     int NumBooks = 1;
@@ -277,10 +322,17 @@ public:
         this->NumOperations += 1;
         this->operations.push_back(operation);
     }
+    void AddBookCollectionToLibrary(BookCollection bookCollection) {
+        this->NumBooks += 1;
+        this->bookCollections.push_back(bookCollection);
+    }
     void PrintLibrary() {
         printf("\nБиблиотека:\n\nПривязанные книги (%d): \n", Book::getCount());
-        for (int i = 0; i < this->NumBooks; i++) {
-            cout << "\"" << this->book.at(i).GetName() << "\", автор - " << this->book.at(i).author.GetName() << ", год издания - " << this->book.at(i).GetYear() << "\n";
+        for (int i = 0; i < Book::getCount(); i++) {
+            this->book.at(i).Print();
+        }
+        for (int i = 0; i < BookCollection::getCount(); i++) {
+            this->bookCollections.at(i).Print();
         }
         printf("\nПривязанные читатели (%d): \n", Client::getCount());
         for (int i = 0; i < this->NumReaders; i++) {

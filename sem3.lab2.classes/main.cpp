@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <conio.h>
 #include "Lib.h"
+#include "main.h"
 
 int main()
 {
@@ -31,9 +32,17 @@ int main()
         puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Работа со сборником\n5) Сортировка и вывод операций по порядку дат\n6) Выйти из программы\n");
         n = vvod('1', '6');
         if (n == '1') {
-            Book b = BookInput(AuthorInput());
-            library + b;
-            library.PrintLibrary();
+            puts("1) Добавить книгу \n2) Добавить книгу-сборник\n");
+            n = vvod('1', '2');
+            if (n == '1') {
+                Book b = BookInput(AuthorInput());
+                library + b;
+                library.PrintLibrary();
+            }
+            else {
+                BookCollection bookCollection = BookInput(AuthorInput());
+
+            }
         }
         else if (n == '2') {
             library.AddReaderToLibrary(ClientInput());
