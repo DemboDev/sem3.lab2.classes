@@ -138,6 +138,11 @@ public:
     static const int Len = 30;
     static const int LenDate = 11;
     class Author author;
+    void operator=(Book* other) {
+        this->name = other->name;
+        this->year = other->year;
+        this->author = other->author;
+    }
     Book operator++(){
         nBooks++;
     }
@@ -161,7 +166,7 @@ public:
     }
     ~Book() {
     }
-    string GetName() {
+    const string& GetName() const{
         return name;
     }
     int GetYear() {
@@ -171,7 +176,10 @@ public:
         this->name = name;
     }
     void SetYear(int year) {
-        year = year;
+        this->year = year;
+    }
+    void SetAuthor(Author author) {
+        this->author = author;
     }
     void Print() {
         cout << "Название: \"" << name << "\", год издания: " << year << ", Автор: " << author.GetName() << endl;
@@ -182,8 +190,9 @@ int Book::nBooks = 0;
 
 class BookCollection: protected Book {
     private: vector<string> stories;
+           static int nBookColl;
     public: BookCollection(string name, Author author, int year, vector<string> stories) : Book(name, author, year) {
-          nBookColl++;
+        nBookColl++;
           this->stories = stories;
           }
           BookCollection(string name, Author author, int year) : Book(name, author, year) {
@@ -191,11 +200,13 @@ class BookCollection: protected Book {
               this->stories = stories;
           }
           BookCollection() {
+              nBookColl++;
           }
-          void operator=(Book* book) {
-              SetName(book->GetName());
-              SetYear(book->GetYear());
-              this->author = book->author;
+          BookCollection& operator=(Book& b) {
+              SetYear(b.GetYear());
+              SetName(b.GetName());
+              SetAuthor(b.author);
+              return *this;
           }
           void AddStory(string story) {
               stories.push_back(story);
@@ -212,14 +223,12 @@ class BookCollection: protected Book {
                   cout << "Рассказ \"" << stories.at(i) << "\"" << endl;
               }
           }
-          static int getCount() {
+          static int getCountBC() {
               return nBookColl;
           }
 };
 
-
-
-int nBookColl = 0;
+int BookCollection::nBookColl = 0;
 
 class Operation {
 private:
@@ -328,11 +337,13 @@ public:
     }
     void PrintLibrary() {
         printf("\nБиблиотека:\n\nПривязанные книги (%d): \n", Book::getCount());
-        for (int i = 0; i < Book::getCount(); i++) {
+        for (int i = 0; i < Book::getCount() - BookCollection::getCountBC(); i++) {
             this->book.at(i).Print();
         }
-        for (int i = 0; i < BookCollection::getCount(); i++) {
-            this->bookCollections.at(i).Print();
+        if (BookCollection::getCountBC() != 0) {
+            for (int i = 0; i < BookCollection::getCountBC(); i++) {
+                this->bookCollections.at(i).Print();
+            }
         }
         printf("\nПривязанные читатели (%d): \n", Client::getCount());
         for (int i = 0; i < this->NumReaders; i++) {

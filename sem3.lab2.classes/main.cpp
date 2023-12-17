@@ -6,7 +6,6 @@
 #include <windows.h>
 #include <conio.h>
 #include "Lib.h"
-#include "main.h"
 
 int main()
 {
@@ -40,8 +39,11 @@ int main()
                 library.PrintLibrary();
             }
             else {
-                BookCollection bookCollection = BookInput(AuthorInput());
-
+                Book b = BookInput(AuthorInput());
+                BookCollection bc;
+                bc = b;
+                library.AddBookCollectionToLibrary(bc);
+                library.PrintLibrary();
             }
         }
         else if (n == '2') {
