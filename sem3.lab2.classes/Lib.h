@@ -154,8 +154,11 @@ public:
         this->year = other->year;
         this->author = other->author;
     }
-    Book operator++(){
+    void operator++(){
         nBooks++;
+    }
+    void operator--() {
+        nBooks--;
     }
     static int getCount() {
         return nBooks;
@@ -212,6 +215,9 @@ class BookCollection: protected Book {
           }
           BookCollection() {
               nBookColl++;
+          }
+          void operator--() {
+              nBookColl--;
           }
           BookCollection& operator=(Book& b) {
               SetYear(b.GetYear());

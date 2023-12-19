@@ -169,6 +169,7 @@ int main()
             BookCollection* bc1 = &bookCol;
             b1->Print();
             bc1->Print();
+            --bookCol;
             _getch();
         }
     } while (exit == 0);
