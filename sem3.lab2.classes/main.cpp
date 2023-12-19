@@ -17,7 +17,7 @@ int main()
     catch (const invalid_argument& errorClient) {
         cout << errorClient.what();
     }
-    Author author = AuthorInput();
+    Author<string> author = AuthorInput();
     Book book = BookInput(author);
     Client client = ClientInput();
     Operation operation = OperationInput(book, client);
@@ -28,8 +28,8 @@ int main()
         system("cls");
         library.PrintLibrary();
         puts("Библиотека создана. . .");
-        puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Работа со сборником\n5) Сортировка и вывод операций по порядку дат\n6) Выйти из программы\n");
-        n = vvod('1', '6');
+        puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Работа со сборником\n5) Сортировка и вывод операций по порядку дат\n6) Выйти из программы\n7) Тест для виртуальной функции\n");
+        n = vvod('1', '7');
         if (n == '1') {
             puts("1) Добавить книгу \n2) Добавить книгу-сборник\n");
             n = vvod('1', '2');
@@ -42,6 +42,17 @@ int main()
                 Book b = BookInput(AuthorInput());
                 BookCollection bc;
                 bc = b;
+                puts("Введите количество рассказов (до 5)");
+                int k;
+                do {
+                    scanf("%d", &k);
+                } while (k < 1 || k > 5);
+                string str;
+                for (int i = 0; i < k; i++) {
+                    cout << "Введите название рассказа " << i + 1 << endl;
+                    cin >> str;
+                    bc.AddStory(str);
+                }
                 library.AddBookCollectionToLibrary(bc);
                 library.PrintLibrary();
             }
@@ -93,20 +104,6 @@ int main()
             library.AddOperationToLibrary(OperationInput(b, c));
             library.PrintLibrary();
         }
-        else if (n == '6') {
-            int ans;
-            puts("Точно?\n1)Да\n2)Нет");
-            scanf("%d", &ans);
-            if (ans == 1) {
-                exit = 1;
-            }
-        }
-        else if (n == '5') {
-            system("cls");
-            transferElements(library, queue);
-            queue.Print();
-            _getch();
-        }
         else if (n == '4') {
             static Collection collection;
             int choice;
@@ -131,14 +128,48 @@ int main()
                     } while (nOfBook < 1 || nOfBook > library.GetNumBooks());
                     Book b = library.book.at(nOfBook - 1);
                     collection.AddBook(num, b);
-                    }
+                }
                 if (choice == '2') {
                     system("cls");
                     collection.Print();
                     puts("Нажмите любую клавишу для продолжения");
                     _getch();
-                    }
+                }
             } while (choice != '3');
+        }
+        else if (n == '5') {
+            system("cls");
+            transferElements(library, queue);
+            queue.Print();
+            _getch();
+        }
+        else if (n == '6') {
+            int ans;
+            puts("Точно?\n1)Да\n2)Нет");
+            scanf("%d", &ans);
+            if (ans == 1) {
+                exit = 1;
+            }
+        }
+        if (n == '7') {
+            Book* b1 = &book;
+            BookCollection bookCol;
+            bookCol = book;
+            puts("Введите количество рассказов (до 5)");
+            int k;
+            do {
+                scanf("%d", &k);
+            } while (k < 1 || k > 5);
+            string str;
+            for (int i = 0; i < k; i++) {
+                cout << "Название рассказа " << i + 1 << endl;
+                cin >> str;
+                bookCol.AddStory(str);
+            }
+            BookCollection* bc1 = &bookCol;
+            b1->Print();
+            bc1->Print();
+            _getch();
         }
     } while (exit == 0);
 

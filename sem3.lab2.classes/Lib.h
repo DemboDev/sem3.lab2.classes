@@ -10,8 +10,19 @@
 #include <algorithm>
 using namespace std;
 // Классы
+class AbstractAuthor {
+public:
+    virtual string GetName() = 0;
+    virtual string GetDate() = 0;
+    virtual string GetCountry() = 0;
+    virtual void SetName(string name) = 0;
+    virtual void SetDate(string date) = 0;
+    virtual void SetCountry(string country) = 0;
+    virtual void PrintAuthor() = 0;
+};
 
-class Author {
+template <class D>
+class Author : AbstractAuthor {
 private:
     string name;
     string date;
@@ -21,7 +32,7 @@ public:
     static const int LenDate = 11;
     Author() {
     }
-    Author(string name, string date, string country) {
+    Author(string name, D date, string country) {
         if (name.empty() || country.empty()) {
             exit(-1);
         }
@@ -137,7 +148,7 @@ private:
 public:
     static const int Len = 30;
     static const int LenDate = 11;
-    class Author author;
+    class Author<std::string> author;
     void operator=(Book* other) {
         this->name = other->name;
         this->year = other->year;
@@ -151,9 +162,9 @@ public:
     }
     Book() {
     }
-    Book(Author author) {
+    Book(Author<string> author) {
     }
-    Book(string name, Author author, int year) {
+    Book(string name, Author<string> author, int year) {
         nBooks++;
         if (name.empty() || year < 1000) {
             exit(-1);
@@ -166,7 +177,7 @@ public:
     }
     ~Book() {
     }
-    const string& GetName() const{
+    string& GetName() {
         return name;
     }
     int GetYear() {
@@ -178,11 +189,11 @@ public:
     void SetYear(int year) {
         this->year = year;
     }
-    void SetAuthor(Author author) {
+    void SetAuthor(Author<string> author) {
         this->author = author;
     }
-    void Print() {
-        cout << "Название: \"" << name << "\", год издания: " << year << ", Автор: " << author.GetName() << endl;
+    virtual void Print() {
+        cout << "Название: \"" << this->name << "\", год издания: " << year << ", Автор: " << author.GetName() << endl;
     }
 };
 
@@ -191,11 +202,11 @@ int Book::nBooks = 0;
 class BookCollection: protected Book {
     private: vector<string> stories;
            static int nBookColl;
-    public: BookCollection(string name, Author author, int year, vector<string> stories) : Book(name, author, year) {
+    public: BookCollection(string name, Author<string> author, int year, vector<string> stories) : Book(name, author, year) {
         nBookColl++;
           this->stories = stories;
           }
-          BookCollection(string name, Author author, int year) : Book(name, author, year) {
+          BookCollection(string name, Author<string> author, int year) : Book(name, author, year) {
               nBookColl++;
               this->stories = stories;
           }
@@ -220,7 +231,7 @@ class BookCollection: protected Book {
           void Print() {
               Book::Print();
               for (int i = 0; i < stories.size(); i++) {
-                  cout << "Рассказ \"" << stories.at(i) << "\"" << endl;
+                  cout << "    |" << i + 1 << "| Рассказ \"" << stories.at(i) << "\"" << endl;
               }
           }
           static int getCountBC() {
@@ -503,9 +514,9 @@ void wait() {
 }
 
 // Основные функции
-Author AuthorInput() { // ввод автора
-    int Len = Author::Len;
-    int LenDate = Author::LenDate;
+Author<string> AuthorInput() { // ввод автора
+    int Len = Author<string>::Len;
+    int LenDate = Author<string>::LenDate;
     string name;
     string date;
     string country;
@@ -522,7 +533,7 @@ Author AuthorInput() { // ввод автора
     puts("Введите страну происхождения автора");
     cin >> country;
     wait();
-    return Author(name, date, country);
+    return Author<string>(name, date, country);
 }
 
 Client ClientInput() { // ввод клиента (читателя)
@@ -548,7 +559,7 @@ Client ClientInput() { // ввод клиента (читателя)
     return Client(name, date, address);
 }
 
-Book BookInput(Author author) {
+Book BookInput(Author<string> author) {
     int Len = Book::Len;
     int LenDate = Book::LenDate;
     int year;
