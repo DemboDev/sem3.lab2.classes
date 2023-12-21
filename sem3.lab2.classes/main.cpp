@@ -21,15 +21,15 @@ int main()
     Book book = BookInput(author);
     Client client = ClientInput();
     Operation operation = OperationInput(book, client);
-    Library library = LibraryInp(book, client, operation);
+    Library<Book> library = LibraryInp(book, client, operation);
     int exit = 0; char n;
     QueueOfOperations queue;
     do {
         system("cls");
         library.PrintLibrary();
         puts("Библиотека создана. . .");
-        puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Работа со сборником\n5) Сортировка и вывод операций по порядку дат\n6) Выйти из программы\n7) Тест для виртуальной функции\n");
-        n = vvod('1', '7');
+        puts("Хотите добавить элемент в библиотеку?\n1) Добавить Книгу\n2) Добавить читателя\n3) Добавить операцию\n4) Работа со сборником\n5) Сортировка и вывод операций по порядку дат\n6) Выйти из программы\n7) Тест для виртуальной функции\n8) Сортировка книг по году выпуска\n9) Поиск книги по названию\n");
+        n = vvod('1', '9');
         if (n == '1') {
             puts("1) Добавить книгу \n2) Добавить книгу-сборник\n");
             n = vvod('1', '2');
@@ -151,7 +151,7 @@ int main()
                 exit = 1;
             }
         }
-        if (n == '7') {
+        else if (n == '7') {
             Book* b1 = &book;
             BookCollection bookCol;
             bookCol = book;
@@ -170,6 +170,21 @@ int main()
             b1->Print();
             bc1->Print();
             --bookCol;
+            _getch();
+        }
+        else if (n == '8') {
+            cout << "Для сортировки нажмите любую клавишу. . ." << endl;
+            library.sortBooksByYear();
+            cout << "Сортировка завершена" << endl;
+            _getch();
+        }
+        else if (n == '9') {
+            cout << "Введите название книги для поиска" << endl;
+            string str;
+            do {
+                cin >> str;
+            } while (str.empty());
+            library.searchBookByName(str);
             _getch();
         }
     } while (exit == 0);

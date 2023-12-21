@@ -25,7 +25,7 @@ template <class D>
 class Author : AbstractAuthor {
 private:
     string name;
-    string date;
+    D date;
     string country;
 public:
     static const int Len = 30;
@@ -148,7 +148,7 @@ private:
 public:
     static const int Len = 30;
     static const int LenDate = 11;
-    class Author<std::string> author;
+    class Author< string> author;
     void operator=(Book* other) {
         this->name = other->name;
         this->year = other->year;
@@ -202,16 +202,15 @@ public:
 
 int Book::nBooks = 0;
 
-class BookCollection: protected Book {
+class BookCollection: public Book {
     private: vector<string> stories;
            static int nBookColl;
     public: BookCollection(string name, Author<string> author, int year, vector<string> stories) : Book(name, author, year) {
-        nBookColl++;
+          nBookColl++;
           this->stories = stories;
           }
           BookCollection(string name, Author<string> author, int year) : Book(name, author, year) {
               nBookColl++;
-              this->stories = stories;
           }
           BookCollection() {
               nBookColl++;
@@ -294,6 +293,7 @@ public:
 
 int Operation::nOperations = 0;
 
+template <class T>
 class Library {
 private:
     string address;
@@ -353,10 +353,11 @@ public:
         this->bookCollections.push_back(bookCollection);
     }
     void PrintLibrary() {
-        printf("\nБиблиотека:\n\nПривязанные книги (%d): \n", Book::getCount());
+        printf("\nБиблиотека:\n\nПривязанные книги (%d): \n", Book::getCount() - BookCollection::getCount());
         for (int i = 0; i < Book::getCount() - BookCollection::getCountBC(); i++) {
             this->book.at(i).Print();
         }
+        printf("\nБиблиотека:\n\nПривязанные книги-сборники (%d): \n", BookCollection::getCount());
         if (BookCollection::getCountBC() != 0) {
             for (int i = 0; i < BookCollection::getCountBC(); i++) {
                 this->bookCollections.at(i).Print();
@@ -380,13 +381,41 @@ public:
         this->NumBooks += 1;
         this->book.push_back(book);
     }
+    void sortBooksByYear() {
+        cout << "Сортировка книг. . ." << endl;
+        sort(book.begin(), book.end(), [](Book& a, Book& b) {
+            return a.GetYear() < b.GetYear();
+        });
+        cout << "Сортировка сборников. . ." << endl;
+        sort(bookCollections.begin(), bookCollections.end(), [](BookCollection& a, BookCollection& b) {
+            return a.GetYear() < b.GetYear();
+        });
+    }
+    void searchBookByName(const  string& name) {
+        for (int i = 0; i < book.size(); i++) {
+            if (book.at(i).GetName() == name) {
+                cout << "Найдена книга с таким названием:" << endl;
+                book.at(i).Print();
+                return 1;
+            }
+        }
+        for (int i = 0; i < bookCollections.size(); i++) {
+            if (bookCollections.at(i).GetName() == name) {
+                cout << "Найден сборник с таким названием" << endl;
+                bookCollections.at(i).Print();
+                return 1;
+            }
+        }
+        cout << "Книги с таким названием не существует" << endl;
+        return -1;
+    }
 };
 
 class QueueOfOperations {
 private:
     vector<Operation> operations;
     // Дружественная функция для сравнения дат посимвольно
-    friend void transferElements(const Library& operation, QueueOfOperations& operations);
+    friend void transferElements(const Library<Book>& operation, QueueOfOperations& operations);
     void Sort() {
         int flag;
         Operation temp;
@@ -498,7 +527,7 @@ public:
 };
 
 // Реализация дружественной функции
-void transferElements(const Library& source, QueueOfOperations& destination) {
+void transferElements(const Library<Book>& source, QueueOfOperations& destination) {
     for (int i = 0; i < source.operations.size(); i++) {
         destination.operations.push_back(source.operations.at(i));
     }
@@ -605,13 +634,13 @@ Operation OperationInput(Book book, Client client) {
     return Operation(move, date, book, client);
 }
 
-Library LibraryInp(Book book, Client client, Operation operation) {
-    int Len = Library::Len;
-    int LenDate = Library::LenDate;
+Library<Book> LibraryInp(Book book, Client client, Operation operation) {
+    int Len = Library<Book>::Len;
+    int LenDate = Library<Book>::LenDate;
     string address;
 
     puts("Введите адрес библиотеки");
     cin >> address;
     wait();
-    return Library(book, client, operation, address);
+    return Library<Book>(book, client, operation, address);
 }
