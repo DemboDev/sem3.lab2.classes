@@ -173,7 +173,6 @@ int main()
             _getch();
         }
         else if (n == '8') {
-            cout << "Для сортировки нажмите любую клавишу. . ." << endl;
             library.sortBooksByYear();
             cout << "Сортировка завершена" << endl;
             _getch();

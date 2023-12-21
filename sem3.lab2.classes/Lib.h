@@ -391,7 +391,7 @@ public:
             return a.GetYear() < b.GetYear();
         });
     }
-    void searchBookByName(const  string& name) {
+    int searchBookByName(const  string& name) {
         for (int i = 0; i < book.size(); i++) {
             if (book.at(i).GetName() == name) {
                 cout << "Найдена книга с таким названием:" << endl;
